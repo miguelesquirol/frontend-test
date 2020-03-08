@@ -14,6 +14,8 @@ transition: all 0.5s ease;
 
 }
 
+
+
 .Search input[type=text] {
   color: white;
 }
@@ -43,6 +45,24 @@ padding: 0px;
 border: none;
 transition: all 0.5s ease;
 }
+
+
+@media only screen and (max-width: 600px) {
+
+.Search {
+display: flex;
+justify-content: center;
+flex-wrap:wrap;
+}
+
+.Search input, .Search button {
+width: 100%;
+  }
+
+  .Search button {
+  padding: 20px 0px;}
+}
+
 
 .Search button:hover {
 background: #353434;
