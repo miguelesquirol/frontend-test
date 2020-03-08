@@ -1,0 +1,106 @@
+.FilmCard {
+    width: 300px;
+    height: 400px;
+    display:block;
+    position: relative;
+    box-shadow: 0 0 0 2px #000;
+    overflow: hidden;
+    margin: 20px;
+}
+
+
+
+
+
+
+
+.FilmCard {
+  background-color: #000000;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+  display: inline-block;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6em;
+  margin: 10px;
+  max-width: 310px;
+  min-width: 250px;
+  overflow: hidden;
+  position: relative;
+  text-align: left;
+  width: 100%;
+}
+
+
+
+.FilmCard * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+
+.FilmCard img {
+  max-width: 100%;
+  opacity: 0.75;
+  position: relative;
+  vertical-align: top;
+}
+
+.figcaption {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: tranparent;
+}
+.figcaption:hover {
+  background-color: rgba(236, 188, 46, 0.75);
+}
+
+.FilmCard h3 {
+  -webkit-transform: translateY(-100%);
+  transform: translateY(-100%);
+  background-color: #000000;
+  top: 0;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  margin: 0;
+  padding: 10px 20px;
+  position: absolute;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+.FilmCard p {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  padding: 0px 20px;
+  opacity: 0;
+  text-align: right;
+  -webkit-transition-delay: 0.15s;
+  transition-delay: 0.15s;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+
+
+.FilmCard:hover .hover,
+.FilmCard.hover .hover {
+  opacity: 1;
+}
+
+.FilmCard:hover p,
+.FilmCard.hover p {
+  opacity: 1;
+}
+
+.FilmCard:hover h3,
+.FilmCard.hover h3 {
+  -webkit-transform: translateY(0%);
+  transform: translateY(0%);
+}

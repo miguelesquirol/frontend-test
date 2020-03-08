@@ -1,0 +1,49 @@
+.Search {
+display: flex;
+justify-content: center;
+}
+
+.Search input {
+width: 500px;
+padding: 20px;
+font-size: 18px;
+background: #1c1c1c;
+margin: 20px;
+border: none;
+transition: all 0.5s ease;
+
+}
+
+.Search input[type=text] {
+  color: white;
+}
+
+.Search input:focus {
+    background: #eee !important;
+}
+
+.Search input:hover[type=text], .Search input:focus[type=text] {
+  color: #000;
+}
+
+.Search input:hover {
+    background: #353434;
+}
+
+
+
+.Search button {
+width: 200px;
+padding: 0px;
+font-size: 18px;
+background: #1c1c1c;
+margin: 20px;
+color: #fff;
+padding: 0px;
+border: none;
+transition: all 0.5s ease;
+}
+
+.Search button:hover {
+background: #353434;
+}

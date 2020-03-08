@@ -15,7 +15,7 @@ class App extends Component {
 
     searchClickHandler = (event) => {
         this.setState({
-            search: this.state.input
+            search:  "Searching " + this.state.input
         })
     }
 
@@ -36,7 +36,7 @@ class App extends Component {
 
           <Layout>
             <Search changed={this.searchChangeHandler} clicked={this.searchClickHandler}  fetch={this.fetchData}/>
-            <SearchResult search={this.state.search} filmlist={this.state.films.Search} />
+            <SearchResult search= {this.state.search} filmlist={this.state.films.Search} />
 
           </Layout>
 

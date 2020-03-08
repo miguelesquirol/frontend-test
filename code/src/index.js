@@ -1,20 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import classes from './index.css';
 import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
 import App from './App';
 import FilmDetails from './components/FilmDetails/FilmDetails';
 import NotFound from './components/NotFound/NotFound';
+import Logo from './assets/logo.png';
+
+
+
 
 const routing = (
           <Router>
             <div>
-                   <ul>
-                    <li>
-                      <Link to="/">Home</Link>
-                    </li>
+                      <Link to="/" className={classes.Logo} >
+                            <img src={Logo}  alt="logo"/>
+                      </Link>
 
-                  </ul>
                   <Switch>
                       <Route path="/" component={App} exact />
                       <Route path="/films/:id" component={FilmDetails} />
