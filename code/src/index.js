@@ -5,8 +5,6 @@ import classes from './index.css';
 import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
 import App from './App';
 import GameDetails from './components/GameDetails/GameDetails';
-import NotFound from './components/NotFound/NotFound';
-import Logo from './assets/logo.png';
 
 
 
@@ -22,8 +20,6 @@ const routing = (
                   <Switch>
                       <Route path="/" component={App} exact />
                       <Route path="/Games/:id" component={GameDetails} />
-
-                      <Route component={NotFound} />
                   </Switch>
             </div>
           </Router>
