@@ -13,9 +13,11 @@ import Logo from './assets/logo.png';
 const routing = (
           <Router>
             <div>
-                      <Link to="/" className={classes.Logo} >
-                            <img src={Logo}  alt="logo"/>
-                      </Link>
+                      <div className={classes.Tobar}>
+                          <Link to="/" className={classes.Logo} >
+                                Dashboard
+                          </Link>
+                      </div>
 
                   <Switch>
                       <Route path="/" component={App} exact />

@@ -1,5 +1,5 @@
 
-import React, { Component, useEffect, useRef } from 'react'
+import React, { Component } from 'react'
 import * as d3 from 'd3'
 
 
@@ -11,7 +11,6 @@ class PieChart extends Component {
 
 
     componentDidMount() {
-        console.log("comes", this.props.data)
         if (this.props.data) {
                 
             this.drawChart();
@@ -25,7 +24,6 @@ class PieChart extends Component {
     drawChart() {
         var propData = []
         propData = (this.state.data)
-        console.log("test", this.props.data)
         var svg = d3.select(".myDiv2").append("svg")
         .attr("width", 960)
         .attr("height", 300)
@@ -78,6 +76,8 @@ class PieChart extends Component {
         g.append("path")
           .datum(data) 
           .attr("class", "line")
+          .attr("fill", "none")
+          .attr("stroke-width", "3")
           .style("stroke", color(i))
           .attr("d", lineFunction);
       }

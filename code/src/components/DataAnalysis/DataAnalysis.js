@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import classes from './DataAnalysis.css'
-import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import DatePicker from "react-datepicker";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import PieChartData from "../PieChart/PieChart"
 import ReviewTime from "../ReviewTime/ReviewTime"
-
-import { select, scaleOrdinal, pie } from "d3";
 
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
@@ -22,7 +19,6 @@ class DataAnalysis extends Component {
     }
 
     fetchData = (event) => {
-        console.log("run")
         var startDateFormated = format(this.state.startDate, "yyyy-MM-dd");
         var endDateFormated = format(this.state.endDate, "yyyy-MM-dd");
 
@@ -52,132 +48,163 @@ class DataAnalysis extends Component {
     render() {
 
 
-function compressArray(original) {
- 
-	var compressed = [];
-	// make a copy of the input array
-	var copy = original.slice(0);
- 
-	// first loop goes over every element
-	for (var i = 0; i < original.length; i++) {
- 
-		var myCount = 0;	
-		// loop over every element in the copy and see if it's the same
-		for (var w = 0; w < copy.length; w++) {
-			if (original[i] == copy[w]) {
-				// increase amount of times duplicate is found
-				myCount++;
-				// sets item to undefined
-				delete copy[w];
-			}
-		}
- 
-		if (myCount > 0) {
-			var a = new Object();
-			a.date = original[i];
-			a.a = myCount;
-			compressed.push(a);
-		}
-	}
- 
-	return compressed;
-};
 
+        function compressArray(original) {
+
+            var compressed = [];
+            var copy = original.slice(0);
+            for (var i = 0; i < original.length; i++) {
+
+                var myCount = 0;
+                for (var w = 0; w < copy.length; w++) {
+                    if (original[i] == copy[w]) {
+                        myCount++;
+                        delete copy[w];
+                    }
+                }
+
+                if (myCount > 0) {
+                    var a = new Object();
+                    a.date = original[i];
+                    a.a = myCount;
+                    compressed.push(a);
+                }
+            }
+
+            return compressed;
+        };
+
+
+        function average(arr) {
+            const sum = arr.reduce((sum, val) => (sum += val));
+            const len = arr.length;
+
+            return sum / len;
+        }
 
         const Data = props => {
             let reviewNumber, positive, negative
             if (props.reviews) {
                 const reviewlist = Object.values(props.reviews.data)
-
-                console.log("reviewlist", reviewlist)
                 reviewNumber = reviewlist.length;
-                
-                
                 var newstring = [];
+                var hours = []
+                var gamenumber = [];
                 var reviewlistnew = [...reviewlist]
-
                 reviewlistnew.map(sweetItem => {
-                    
+
+                    var hours_played = sweetItem.hours_played
+                    var owned_games_amount = sweetItem.owned_games_amount;
+
+                    hours.push(hours_played)
+                    gamenumber.push(owned_games_amount)
+
                     var date = sweetItem.date_posted
-                    
+
                     var newdate = format(
                         new Date(date),
                         'yyyy-MM-dd'
-                      )
+                    )
 
                     newstring.push(newdate)
 
                 })
 
-                console.log(newstring)
-                           
+
                 var newArray = compressArray(newstring);
-
-                
-                
-                
-
-                // var counts = {};
-                // newstring.forEach(function(x) { counts[x] = (counts[x] || 0)+1; });
-                // console.log(counts[0])
 
                 positive = reviewlist.filter((obj) => obj.recommended === 1).length;
                 negative = reviewlist.filter((obj) => obj.recommended === 0).length;
 
+                var averagehours = average(hours);
+                var averagegames = average(gamenumber);
+
+
+                return (
+                    <div className={classes.Data}>
+                        <div className={classes.Data1}>
+                            <div className={classes.Reviews}>
+                                <h2>{reviewNumber}</h2>
+                                <p>Number of reviews</p>
+                            </div>
+                            <div className={classes.PvN}>
+                                <div><h3>{positive}</h3>Positive Reviews</div>
+                                <div><h3>{negative}</h3>Negative Reviews</div>
+                            </div>
+
+                            <div className={classes.PvN}>
+                                <div><h3>{Math.round(averagehours)}</h3>Average Hours Played</div>
+                                <div><h3>{Math.round(averagegames)}</h3>Average Games Owned</div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div className={classes.Data2}>
+                            <h4>Positive vs Negative Reviews</h4>
+                            <PieChartData positive={positive} negative={negative} />
+                        </div>
+
+                        <div className={classes.Data3}>
+                            <h4>Number of cases vs time</h4>
+                            <ReviewTime data={newArray} />
+                        </div>
+                    </div>
+                )
+
             }
 
-            return (
-                <div>
-                    <h2>Number of reviews: {reviewNumber}</h2>
-                    <div>Positive Reviews: {positive}</div>
-                    <div>Negative Reviews: {negative}</div>
+            else {
 
-                    Pie PieChart
-                    <PieChartData positive={positive} negative={negative}/>
-
-                    <ReviewTime data={newArray}/>
-                </div>
-            )
+                return (
+                    <h2 className={classes.Nothingtosee}>Nothing to see... Please pick a date range</h2>
+                )
+            }
         }
 
 
-      
 
         return (
             <div>
+                <div className={classes.Details}>
+                    <h3>Data Analysis</h3>
+
+                    <div className={classes.Filter}>
+                        <div className={classes.From}>From
+                    <DatePicker
+                                showPopperArrow={false}
+                                dateFormat="yyyy-MM-dd"
+                                selected={this.state.startDate}
+                                onChange={this.handleChangeStartDate}
+                                selectsStart
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
+                            />
+                        </div>
+                        <div className={classes.From}>To
+                    <DatePicker
+                                showPopperArrow={false}
+                                dateFormat="yyyy-MM-dd"
+                                selected={this.state.endDate}
+                                onChange={this.handleChangeEndDate}
+                                selectsEnd
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
+                                minDate={this.state.startDate}
+                            />
+                        </div>
+
+                        <button className={classes.Fetch} onClick={this.fetchData}>
+                            Fetch Data
+                    </button>
+
+                    </div>
 
 
-                <h3>Filter</h3>
+                    <Data reviews={this.state.data} startDate={this.state.startDate} endDate={this.state.endDate} />
 
-                <DatePicker
-                    showPopperArrow={false}
-                    dateFormat="yyyy-MM-dd"
-                    selected={this.state.startDate}
-                    onChange={this.handleChangeStartDate}
-                    selectsStart
-                    startDate={this.state.startDate}
-                    endDate={this.state.endDate}
-                />
-                <DatePicker
-                    showPopperArrow={false}
-                    dateFormat="yyyy-MM-dd"
-                    selected={this.state.endDate}
-                    onChange={this.handleChangeEndDate}
-                    selectsEnd
-                    startDate={this.state.startDate}
-                    endDate={this.state.endDate}
-                    minDate={this.state.startDate}
-                />
-
-                <button className="fetch-button" onClick={this.fetchData}>
-                    Fetch Data
-            </button>
-
-                <h1>Number of Reviews</h1>
-
-                <Data reviews={this.state.data} startDate={this.state.startDate} endDate={this.state.endDate}/>
-
-
+                </div>
 
             </div>
         )
@@ -187,9 +214,9 @@ function compressArray(original) {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
-            startDate: new Date(),            
+            startDate: new Date(),
             endDate: new Date(),
             data: null,
         };

@@ -1,29 +1,37 @@
 import React, { Component } from 'react';
 import classes from './GameDetails.css'
-import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
-import DatePicker from "react-datepicker";
+import ReactHtmlParser from 'react-html-parser';
 
-import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
 class GameDetails extends Component {
 
   componentWillMount() {
     this.setState({ steam_appid: this.state.steam_appid });
-  }
-  
-  fetchData = (event) =>  {
-    fetch('https://zpx-codetest.herokuapp.com/api/v1/stats/steam/reviews?offset=0&setSize=10&ascending=true&returnCount=false&filterByField=steam_appid&filterValue='+this.state.steam_appid+'&filterFrom=2019-28-07&filterTo=2019-28-10')
+    fetch('https://zpx-codetest.herokuapp.com/api/v1/stats/steam/reviews?offset=0&setSize=10&ascending=true&returnCount=false&filterByField=steam_appid&filterValue='+this.state.steam_appid)
     .then(response => response.json())
     .then(data => this.setState({ data }));
+    
   }
  
-  handleChange = date => {
+
+  fetchData = (event) =>  {
+    
+    fetch('https://zpx-codetest.herokuapp.com/api/v1/stats/steam/reviews?offset='+this.state.offset+'&setSize=10&ascending=true&returnCount=false&filterByField=steam_appid&filterValue='+this.state.steam_appid)
+        .then(response => response.json())
+        .then(data => this.setState({ data }))
+  }
+        
+
+  nextOffset = (event) => {
     this.setState({
-      startDate: date
-    });
-  };
+        offset:  this.state.data.nextOffset
+    })
+    
+
+    this.timer = setTimeout(() => this.fetchData(), 1000);
 
 
+}
 
 
   render() {
@@ -37,23 +45,23 @@ class GameDetails extends Component {
         const reviewlist = Object.values(props.reviews.data)     
        
         const listItems = reviewlist.map((review) =>
-           
-          <ul className={classes.review} key={`review-${review.id}`}>
-            <li>ID: {review.id}</li>
-            <li>Date Posted: {review.date_posted}</li>
-            <li>Hours Player" {review.hours_played}</li>
-            <li>Language: {review.lang_key}</li>
-            <li>Number of Games Owned: {review.owned_games_amount}</li>
-            <li>Recieved Compensation: {review.received_compensation}</li>
-            <li>Recomended?: {review.recommended}</li>
-            <div><h2>Review:</h2>
-              { ReactHtmlParser(review.review_text) }
-             </div>
+
+        <div key={`review-${review.id}`} className={classes.Review}>
+        { ReactHtmlParser(review.review_text) }
+
+          <ul className={classes.ReviewInfo} >            
+            <li><strong>Date Posted:</strong> {review.date_posted}</li>
+            <li><strong>Hours Player:</strong> {review.hours_played}</li>
+            <li><strong>Language:</strong> {review.lang_key}</li>
+            <li><strong>Number of Games Owned:</strong> {review.owned_games_amount}</li>
+            <li><strong>Recieved Compensation:</strong> {review.received_compensation}</li>
+            <li><strong>Recomended?:</strong> {review.recommended}</li>
           </ul>
+        </div>
 
         );
         return (
-          <div>{listItems}</div>
+          <div className={classes.ReviewsWrapper}>{listItems}</div>
         );
 
         
@@ -62,49 +70,31 @@ class GameDetails extends Component {
       }
       else {
         return ( 
-        <li>test2</li>
+        <p>Nothing to see</p>
         )
       }
     }
   
 
     const { title, id, steam_appid } = this.props.location.state
-
-    console.log(this.state.data)
-
  
 
     return (
       <div>
-        <h1>{title}</h1>
-        <p> {id} </p>
-        <p> {steam_appid}</p>
+        <div className={classes.Game}>
+          <h1>{title}</h1>
+          <a href={ 'https://store.steampowered.com/app/' + {steam_appid} } target="_blank" className={classes.externalLink}>Steam Link</a>
+        </div>
 
-        <h3>Filter</h3>
-        
-        <DatePicker
-        showPopperArrow={false}
-        dateFormat="yyyy-MM-dd"
-        selected={this.state.startDate}
-        onChange={this.handleChange}
-        selectsStart
-        startDate={this.state.startDate}
-        endDate={this.state.endDate}
-      />
-      <DatePicker
-        showPopperArrow={false}
-        dateFormat="yyyy-MM-dd"
-        selected={this.state.endDate}
-        onChange={this.handleChange}
-        selectsEnd
-        startDate={this.state.startDate}
-        endDate={this.state.endDate}
-        minDate={this.state.startDate}
-      />
+        <div className={classes.Reviews}>
+          
+          <h2>Reviews</h2>    
+            <Reviews reviews = {this.state.data} />
+            <button className={classes.Button} onClick={this.nextOffset} >
+                Next
+            </button>
 
-
-        <Reviews reviews = {this.state.data} />
-
+        </div>
 
       </div>
     )
@@ -119,6 +109,7 @@ class GameDetails extends Component {
       startDate: new Date(),
       endDate:  new Date(),
       data: null,
+      offset: 0,
       steam_appid: this.props.location.state.steam_appid
     };
   }

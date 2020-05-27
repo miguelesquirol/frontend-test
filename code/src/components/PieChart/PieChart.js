@@ -1,5 +1,5 @@
 
-import React, { Component, useEffect, useRef } from 'react'
+import React, { Component } from 'react'
 import * as d3 from 'd3'
 
 
@@ -15,8 +15,6 @@ class PieChart extends Component {
     }
 
     drawChart() {
-        console.log(this.props.positive)
-        console.log(this.props.negative)
     
         var radius = Math.min(this.state.width, this.state.height) / 2 - this.state.margin
 
@@ -36,7 +34,7 @@ class PieChart extends Component {
         // set the color scale
         var color = d3.scaleOrdinal()
             .domain(datainfo)
-            .range(d3.schemeSet2);
+            .range(d3.schemeSet1);
 
             
         // Compute the position of each group on the pie:
